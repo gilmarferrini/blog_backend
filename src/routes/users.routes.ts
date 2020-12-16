@@ -5,8 +5,14 @@ import UserController from '../app/controllers/UserController';
 const usersRouter = Router();
 const userController = new UserController();
 
-usersRouter.get('/', (request, response) => {
-  return response.json({ message: 'Rota para listar' });
+usersRouter.get('/', async (request, response) => {
+  try {
+    const users = await userController.index();
+
+    return response.status(200).json(users);
+  } catch (e) {
+    return response.status(400).json({ error: e.message });
+  }
 });
 
 usersRouter.post('/', async (request, response) => {
