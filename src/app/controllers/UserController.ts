@@ -41,6 +41,13 @@ class UserController {
 
     return user;
   }
+
+  async index(): Promise<IUserResponse[]> {
+    const userRepository = getRepository(User);
+    const users = await userRepository.find();
+
+    return users === undefined ? [] : users;
+  }
 }
 
 export default UserController;
