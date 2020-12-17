@@ -8,6 +8,7 @@ const userController = new UserController();
 usersRouter.get('/', async (request, response) => {
   try {
     const users = await userController.index();
+    console.log('foi chamado');
 
     return response.status(200).json(users);
   } catch (e) {
