@@ -92,6 +92,28 @@ class UserController {
 
     return newUser;
   }
+
+  async delete(id: string): Promise<boolean> {
+    const userRepository = getRepository(User);
+    const user = await userRepository.findOne({
+      where: { id },
+    });
+
+    if (!user) {
+      throw new Error('Nenhum usuário com este id foi encontrado');
+    }
+
+    let isDeleted = false;
+    const deleted = await userRepository.delete(id);
+
+    if (deleted.affected !== null && deleted.affected !== undefined) {
+      if (deleted.affected > 0) {
+        isDeleted = true;
+      }
+    }
+
+    return isDeleted;
+  }
 }
 
 export default UserController;
