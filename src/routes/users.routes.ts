@@ -15,6 +15,17 @@ usersRouter.get('/', async (request, response) => {
   }
 });
 
+usersRouter.get('/:id', async (request, response) => {
+  try {
+    const { id } = request.params;
+    const user = await userController.show(id);
+
+    return response.status(200).json(user);
+  } catch (e) {
+    return response.status(400).json({ error: e.message });
+  }
+});
+
 usersRouter.post('/', async (request, response) => {
   try {
     const { username, password } = request.body;
@@ -24,6 +35,21 @@ usersRouter.post('/', async (request, response) => {
     });
 
     return response.json({ ...user });
+  } catch (e) {
+    return response.status(400).json({ error: e.message });
+  }
+});
+
+usersRouter.delete('/:id', async (request, response) => {
+  try {
+    const { id } = request.params;
+    const isDeleted = await userController.delete(id);
+
+    if (!isDeleted) {
+      return response.status(500).json({ error: 'Erro ao deletar' });
+    }
+
+    return response.send();
   } catch (e) {
     return response.status(400).json({ error: e.message });
   }
