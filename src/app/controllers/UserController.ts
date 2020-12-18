@@ -18,6 +18,14 @@ interface IUserResponse {
   updated_at: Date;
 }
 
+interface IUser {
+  id: string;
+  username: string;
+  avatar: string;
+  created_at: Date;
+  updated_at: Date;
+}
+
 class UserController {
   async store({ username, password }: IUserRequest): Promise<IUserResponse> {
     const userRepository = getRepository(User);
@@ -42,11 +50,47 @@ class UserController {
     return user;
   }
 
-  async index(): Promise<IUserResponse[]> {
+  async index(): Promise<IUser[]> {
     const userRepository = getRepository(User);
     const users = await userRepository.find();
 
-    return users === undefined ? [] : users;
+    const newUsers =
+      users !== undefined
+        ? users.map(user => {
+            const newUser = {
+              id: user.id,
+              username: user.username,
+              avatar: user.avatar,
+              created_at: user.created_at,
+              updated_at: user.updated_at,
+            };
+
+            return newUser;
+          })
+        : [];
+
+    return newUsers;
+  }
+
+  async show(id: string): Promise<IUser> {
+    const userRepository = getRepository(User);
+    const user = await userRepository.findOne({
+      where: { id },
+    });
+
+    if (!user) {
+      throw new Error('Nenhum usuário com este id foi encontrado');
+    }
+
+    const newUser = {
+      id: user.id,
+      username: user.username,
+      avatar: user.avatar,
+      created_at: user.created_at,
+      updated_at: user.updated_at,
+    };
+
+    return newUser;
   }
 }
 
