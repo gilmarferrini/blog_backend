@@ -26,6 +26,13 @@ interface IUser {
   updated_at: Date;
 }
 
+interface IRequestUpdate {
+  id: string;
+  username: string;
+  password: string;
+  avatar: string;
+}
+
 class UserController {
   async store({ username, password }: IUserRequest): Promise<IUserResponse> {
     const userRepository = getRepository(User);
@@ -113,6 +120,30 @@ class UserController {
     }
 
     return isDeleted;
+  }
+
+  async update({
+    id,
+    username,
+    password,
+    avatar,
+  }: IRequestUpdate): Promise<IUserResponse> {
+    const userRepository = getRepository(User);
+    const user = await userRepository.findOne({
+      where: { id },
+    });
+
+    if (!user) {
+      throw new Error('Nenhum usuário com este id foi encontrado');
+    }
+
+    user.username = username;
+    user.password = password;
+    user.avatar = avatar;
+
+    await userRepository.save(user);
+
+    return user;
   }
 }
 
