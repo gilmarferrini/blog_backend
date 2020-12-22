@@ -17,11 +17,13 @@ class AvatarController {
     await fs.promises.unlink(avatarPath);
   }
 
-  public async update({ id, avatar }: IRequestUpdate): Promise<void> {
+  public static async update({ id, avatar }: IRequestUpdate): Promise<boolean> {
     const userRepository = getRepository(User);
     const user = await userRepository.findOne({
       where: { id },
     });
+
+    let status = false;
 
     if (!user) {
       throw new Error('Nenhum funcionário com esse id encontrado');
@@ -39,6 +41,10 @@ class AvatarController {
     user.avatar = avatar;
 
     await userRepository.save(user);
+
+    status = true;
+
+    return status;
   }
 }
 
