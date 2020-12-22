@@ -1,9 +1,14 @@
 import { Router } from 'express';
+import multer from 'multer';
 
+import AvatarController from '../app/controllers/AvatarController';
 import UserController from '../app/controllers/UserController';
+
+import uploadConfig from '../config/upload';
 
 const usersRouter = Router();
 const userController = new UserController();
+const upload = multer(uploadConfig);
 
 usersRouter.get('/', async (request, response) => {
   try {
@@ -39,6 +44,25 @@ usersRouter.post('/', async (request, response) => {
     return response.status(400).json({ error: e.message });
   }
 });
+
+usersRouter.patch(
+  '/:id',
+  upload.single('avatar'),
+  async (request, response) => {
+    try {
+      const { id } = request.params;
+
+      await AvatarController.update({
+        id,
+        avatar: request.file.filename,
+      });
+
+      return response.json({ message: 'Avatar atualizado com sucesso' });
+    } catch (e) {
+      return response.status(400).json({ error: e.message });
+    }
+  }
+);
 
 usersRouter.delete('/:id', async (request, response) => {
   try {
