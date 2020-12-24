@@ -39,7 +39,7 @@ usersRouter.post('/', async (request, response) => {
       password,
     });
 
-    return response.json({ ...user });
+    return response.status(201).json({ ...user });
   } catch (e) {
     return response.status(400).json({ error: e.message });
   }
@@ -57,7 +57,9 @@ usersRouter.patch(
         avatar: request.file.filename,
       });
 
-      return response.json({ message: 'Avatar atualizado com sucesso' });
+      return response
+        .status(200)
+        .json({ message: 'Avatar atualizado com sucesso' });
     } catch (e) {
       return response.status(400).json({ error: e.message });
     }
@@ -73,7 +75,7 @@ usersRouter.delete('/:id', async (request, response) => {
       return response.status(500).json({ error: 'Erro ao deletar' });
     }
 
-    return response.send();
+    return response.status(204).send();
   } catch (e) {
     return response.status(400).json({ error: e.message });
   }
