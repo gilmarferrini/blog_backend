@@ -19,6 +19,11 @@ export default class CreatePost1608842074204 implements MigrationInterface {
             default: 'uuid_generate_v4()',
           },
           {
+            name: 'post_image',
+            type: 'varchar',
+            isNullable: true,
+          },
+          {
             name: 'user_id',
             type: 'uuid',
           },
