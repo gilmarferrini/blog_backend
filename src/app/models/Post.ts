@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import User from './User';
 
+@Entity('posts')
 class Post {
   @PrimaryGeneratedColumn('uuid')
   id: string;
