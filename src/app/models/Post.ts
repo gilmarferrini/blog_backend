@@ -13,6 +13,9 @@ class Post {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column()
+  post_image: string;
+
   @Column('uuid')
   user_id: string;
 
