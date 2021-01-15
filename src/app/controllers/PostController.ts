@@ -27,6 +27,19 @@ class PostController {
     return posts;
   }
 
+  async show(id: string): Promise<IPostRequest> {
+    const postRepository = getRepository(Post);
+    const post = await postRepository.findOne({
+      where: { id },
+    });
+
+    if (!post) {
+      throw new Error('Nenhum post com este id foi encontrado');
+    }
+
+    return post;
+  }
+
   async store({
     post_image,
     user_id,

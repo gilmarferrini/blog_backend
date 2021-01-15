@@ -3,7 +3,7 @@
   "host": "localhost",
   "port": 5432,
   "username": "postgres",
-  "password": "postgres",
+  "password": "docker",
   "database": "blog",
   "entities": [
     "./src/app/models/*.ts"

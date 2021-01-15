@@ -18,6 +18,17 @@ postsRouter.get('/', async (request, response) => {
   }
 });
 
+postsRouter.get('/:id', async (request, response) => {
+  try {
+    const { id } = request.params;
+    const post = await postController.show(id);
+
+    return response.status(200).json(post);
+  } catch (e) {
+    return response.status(400).json({ error: e.message });
+  }
+});
+
 postsRouter.post(
   '/',
   upload.single('post_image'),
