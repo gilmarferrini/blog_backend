@@ -20,6 +20,11 @@ interface IPostResponse {
 }
 
 class PostController {
+  /**
+   * Método para listar todos os posts.
+   * @author gilmar
+   * @returns retorna um array de posts.
+   */
   async index(): Promise<IPostRequest[]> {
     const postRepository = getRepository(Post);
     const posts = await postRepository.find();
@@ -27,6 +32,12 @@ class PostController {
     return posts;
   }
 
+  /**
+   * Método para listar um post a partir do id.
+   * @param id é o id do post para identificar no banco de dados.
+   * @author gilmar
+   * @returns retorna um objeto contendo o post.
+   */
   async show(id: string): Promise<IPostRequest> {
     const postRepository = getRepository(Post);
     const post = await postRepository.findOne({
@@ -40,6 +51,15 @@ class PostController {
     return post;
   }
 
+  /**
+   * Método para cadastrar um novo post
+   * @param post_image nome da imagem a ser salva.
+   * @param user_id id do usuário para identificar o autor do post.
+   * @param title é o título de post
+   * @param body é o corpo do post
+   * @author gilmar
+   * @returns retorna o post recém-criado.
+   */
   async store({
     post_image,
     user_id,

@@ -34,6 +34,13 @@ interface IRequestUpdate {
 }
 
 class UserController {
+  /**
+   * Método para criar um novo usuário.
+   * @param username é o username do usuário.
+   * @param password é a senha do usuário
+   * @author gilmar
+   * @returns retorna o usuário recém-criado.
+   */
   async store({ username, password }: IUserRequest): Promise<IUserResponse> {
     const userRepository = getRepository(User);
 
@@ -57,6 +64,11 @@ class UserController {
     return user;
   }
 
+  /**
+   * Método para listar todos os usuários.
+   * @author gilmar
+   * @returns retorna um array de usuários.
+   */
   async index(): Promise<IUser[]> {
     const userRepository = getRepository(User);
     const users = await userRepository.find();
@@ -79,6 +91,12 @@ class UserController {
     return newUsers;
   }
 
+  /**
+   * Método para listar um usuário.
+   * @param id para identificar o usuário a ser listado.
+   * @author gilmar
+   * @returns retorna um objeto contendo o usuário
+   */
   async show(id: string): Promise<IUser> {
     const userRepository = getRepository(User);
     const user = await userRepository.findOne({
@@ -100,6 +118,12 @@ class UserController {
     return newUser;
   }
 
+  /**
+   * Método para deleta em usuário a partir do id.
+   * @param id é o identificador do usuário a ser deletado.
+   * @author gilmar
+   * @returns retorna true se foi corretamente deletado e caso contrário retorna false.
+   */
   async delete(id: string): Promise<boolean> {
     const userRepository = getRepository(User);
     const user = await userRepository.findOne({
@@ -122,6 +146,15 @@ class UserController {
     return isDeleted;
   }
 
+  /**
+   * Método para atualizar um usuário a partir do id.
+   * @param id é o identificador do usuário a ser atualizado.
+   * @param username é o username do usuário a ser atualizado.
+   * @param password é a senha do usuário a ser atualizado.
+   * @param avatar é o nome da imagem do usuário a ser atualizado.
+   * @author gilmar
+   * @returns retorna o usuário atualizado
+   */
   async update({
     id,
     username,

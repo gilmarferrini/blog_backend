@@ -12,11 +12,23 @@ interface IRequestUpdate {
 }
 
 class AvatarController {
+  /**
+   * Método para deletar uma imagem.
+   * @param filename nome da imagem.
+   * @author gilmar
+   * @returns não retorna nada.
+   */
   public static async delete(filename: string): Promise<void> {
     const avatarPath = path.join(__dirname, '..', '..', '..', 'tmp', filename);
     await fs.promises.unlink(avatarPath);
   }
 
+  /**
+   * Método para fazer um update de uma imagem existente.
+   * @param id para identificar a foto.
+   * @param avatar para atualizar a nova imagem.
+   * @author gilmar
+   */
   public static async update({ id, avatar }: IRequestUpdate): Promise<boolean> {
     const userRepository = getRepository(User);
     const user = await userRepository.findOne({
