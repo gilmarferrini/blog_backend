@@ -69,7 +69,7 @@ usersRouter.patch(
 usersRouter.delete('/:id', async (request, response) => {
   try {
     const { id } = request.params;
-    const isDeleted = await userController.delete(id);
+    const isDeleted = await userController.deleteByID(id);
 
     if (!isDeleted) {
       return response.status(500).json({ error: 'Erro ao deletar' });

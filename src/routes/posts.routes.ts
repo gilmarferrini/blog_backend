@@ -49,4 +49,17 @@ postsRouter.post(
   }
 );
 
+postsRouter.delete('/:id', async (request, response) => {
+  try {
+    const { id } = request.params;
+    const isDeleted = await postController.deleteByID(id);
+    if (!isDeleted) {
+      return response.status(500).json({ error: 'Erro ao deletar' });
+    }
+
+    return response.status(204).send();
+  } catch (e) {
+    return response.status(400).json({ error: e.message });
+  }
+});
 export default postsRouter;
