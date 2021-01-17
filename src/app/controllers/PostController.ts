@@ -2,6 +2,7 @@ import { getRepository } from 'typeorm';
 import deleteImage from '../../utils/deleteImage';
 import Post from '../models/Post';
 import User from '../models/User';
+import AvatarController from './AvatarController';
 
 interface IPostRequest {
   post_image: string;
@@ -88,6 +89,40 @@ class PostController {
     await postRepository.save(post);
 
     return post;
+  }
+
+  /**
+   * Método para deletar o post a partir do id.
+   * @param id é o identificador do post a ser deletado.
+   * @author gilmar
+   * @returns retorna true se foi corretamente deletado e caso contrário retorna false.
+   */
+  async deleteByID(id: string): Promise<boolean> {
+    const postRepository = getRepository(Post);
+    const checkIfPostExist: Post | undefined = await postRepository.findOne({
+      where: { id },
+    });
+
+    if (!checkIfPostExist) {
+      throw new Error('Nenhum post com este id foi encontrado');
+    }
+
+    let isDeleted = false;
+
+    const postFilename = checkIfPostExist.post_image;
+
+    const deleted = await postRepository.delete(id);
+
+    if (
+      deleted.affected !== null &&
+      deleted.affected !== undefined &&
+      deleted.affected > 0
+    ) {
+      isDeleted = true;
+      await AvatarController.delete(postFilename);
+    }
+
+    return isDeleted;
   }
 }
 
