@@ -3,6 +3,7 @@ import { getRepository } from 'typeorm';
 import { hash } from 'bcrypt';
 
 import User from '../models/User';
+import AvatarController from './AvatarController';
 
 interface IUserRequest {
   username: string;
@@ -124,7 +125,7 @@ class UserController {
    * @author gilmar
    * @returns retorna true se foi corretamente deletado e caso contrário retorna false.
    */
-  async delete(id: string): Promise<boolean> {
+  async deleteByID(id: string): Promise<boolean> {
     const userRepository = getRepository(User);
     const user = await userRepository.findOne({
       where: { id },
@@ -135,12 +136,17 @@ class UserController {
     }
 
     let isDeleted = false;
+    const avatarFilename = user.avatar;
+
     const deleted = await userRepository.delete(id);
 
-    if (deleted.affected !== null && deleted.affected !== undefined) {
-      if (deleted.affected > 0) {
-        isDeleted = true;
-      }
+    if (
+      deleted.affected !== null &&
+      deleted.affected !== undefined &&
+      deleted.affected > 0
+    ) {
+      isDeleted = true;
+      await AvatarController.delete(avatarFilename);
     }
 
     return isDeleted;
