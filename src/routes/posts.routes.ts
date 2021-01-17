@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import multer from 'multer';
 import PostController from '../app/controllers/PostController';
+import checkAuthenticated from '../middlewares/checkAuthenticated';
 
 import uploadConfig from '../config/upload';
 
@@ -31,6 +32,7 @@ postsRouter.get('/:id', async (request, response) => {
 
 postsRouter.post(
   '/',
+  checkAuthenticated,
   upload.single('post_image'),
   async (request, response) => {
     try {
@@ -49,7 +51,7 @@ postsRouter.post(
   }
 );
 
-postsRouter.delete('/:id', async (request, response) => {
+postsRouter.delete('/:id', checkAuthenticated, async (request, response) => {
   try {
     const { id } = request.params;
     const isDeleted = await postController.deleteByID(id);
