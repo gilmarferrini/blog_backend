@@ -19,12 +19,19 @@ class AvatarController {
    * @returns não retorna nada.
    */
   public static async delete(filename: string): Promise<void> {
-    const avatarPath = path.join(__dirname, '..', '..', '..', 'tmp', filename);
+    const avatarPath = path.join(
+      __dirname,
+      '..',
+      '..',
+      '..',
+      'uploads',
+      filename
+    );
     await fs.promises.unlink(avatarPath);
   }
 
   /**
-   * Método para fazer um update de uma imagem existente.
+   * Método para fazer um update de uma imagem existente de um usuário.
    * @param id para identificar a foto.
    * @param avatar para atualizar a nova imagem.
    * @author gilmar
@@ -38,7 +45,7 @@ class AvatarController {
     let status = false;
 
     if (!user) {
-      throw new Error('Nenhum funcionário com esse id encontrado');
+      throw new Error('Nenhum usuário com esse id encontrado');
     }
 
     if (user.avatar) {
